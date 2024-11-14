@@ -1,0 +1,105 @@
+User Roles & Features:
+
+Students:
+
+Profile management with resume upload
+Dashboard showing consolidated performance metrics
+Certificate management system
+Progress tracking and goal setting
+Mock interview scheduling
+Personalized improvement recommendations
+
+
+Administrators:
+
+Student data management
+Performance metric configuration
+LMS content management
+Analytics dashboard
+Batch management
+Interview feedback tracking
+
+
+
+
+Scoring System:
+
+Coding Platform Metrics:
+
+Problems solved (by difficulty level)
+Contest participation and ratings
+Consistency score (regular practice)
+Topic-wise coverage
+
+
+Academic Integration:
+
+CGPA/GPA tracking
+Course-wise performance
+Project work evaluation
+Technical presentation scores
+
+
+LMS Performance:
+
+Course completion rates
+Assessment scores
+Practice exercise completion
+Engagement metrics
+
+
+
+
+Enhanced Features:
+a. Interview Preparation:
+
+Mock interview scheduling system
+Peer review system
+Company-specific preparation tracks
+Interview experience sharing platform
+
+b. Analytics:
+
+Predictive analytics for interview readiness
+Skill gap analysis
+Comparative batch analytics
+Progress tracking over time
+
+c. Gamification:
+
+Achievement badges
+Weekly challenges
+Leaderboards
+Streak maintenance rewards
+
+
+Technical Components:
+a. Authentication Service:
+
+JWT-based authentication
+Role-based access control
+SSO integration with college systems
+
+b. Profile Service:
+
+Student profile management
+Document verification
+Portfolio builder
+
+c. Score Management Service:
+
+API integrations with coding platforms
+Custom scoring algorithms
+Performance tracking
+
+d. Analytics & Metrics Service:
+
+Real-time analytics
+Custom report generation
+Trend analysis
+
+e. Recommendation Service:
+
+Personalized study plans
+Resource recommendations
+Practice problem suggestions
