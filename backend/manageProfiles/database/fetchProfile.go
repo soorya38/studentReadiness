@@ -34,7 +34,6 @@ func FetchProfileFromDB(id string) (Profile, error) {
 	}
 
 	// Decode result into a Profile struct
-	
 	if err := result.Decode(&profile); err != nil {
 		return profile, fmt.Errorf("error decoding document: %v", err)
 	}

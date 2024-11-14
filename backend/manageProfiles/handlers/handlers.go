@@ -11,9 +11,10 @@ import (
 )
 
 func RegisterHandlers() {
-	http.HandleFunc("/create-profile", handleCreateProfile)
+	http.HandleFunc("/create-profile", createProfileHandler)
 	http.HandleFunc("/fetch-profile/", fetchProfileHandler)
 	http.HandleFunc("/delete-profile/", deleteProfileHandler)
+	http.HandleFunc("/update-profile/", updateProfileHandler)
 }
 
 func StartServer(PORT int) error {
@@ -24,7 +25,7 @@ func StartServer(PORT int) error {
 	return nil
 }
 
-func handleCreateProfile(w http.ResponseWriter, r *http.Request) {
+func createProfileHandler(w http.ResponseWriter, r *http.Request) {
 	// Only allow POST method
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
@@ -73,4 +74,28 @@ func deleteProfileHandler(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 	w.Write([]byte("successfully deleted from DB"))
+}
+
+func updateProfileHandler(w http.ResponseWriter, r *http.Request) {
+	// Only allow POST method
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	path := strings.TrimPrefix(r.URL.Path, "/update-profile/")
+	id := strings.Split(path, "/")[0]
+	profileData, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Print(err)
+	}
+
+	var profile database.Profile
+
+	json.Unmarshal(profileData, &profile)
+	
+	if err := database.UpdateProfileInDB(profile, id); err != nil {
+		log.Print(err)
+	}
+
+	w.Write([]byte("successfully updated in DB"))
 }
