@@ -13,6 +13,7 @@ import (
 func RegisterHandlers() {
 	http.HandleFunc("/create-profile", handleCreateProfile)
 	http.HandleFunc("/fetch-profile/", fetchProfileHandler)
+	http.HandleFunc("/delete-profile/", deleteProfileHandler)
 }
 
 func StartServer(PORT int) error {
@@ -63,4 +64,13 @@ func fetchProfileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write([]byte(data))
+}
+
+func deleteProfileHandler(w http.ResponseWriter, r *http.Request) {
+	path := strings.TrimPrefix(r.URL.Path, "/delete-profile/")
+	id := strings.Split(path, "/")[0]
+	if err := database.DeleteProfileFromDB(id); err != nil {
+		log.Print(err)
+	}
+	w.Write([]byte("successfully deleted from DB"))
 }
