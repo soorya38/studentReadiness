@@ -1,15 +1,18 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"manageProfiles/database"
 	"net/http"
+	"strings"
 )
 
 func RegisterHandlers() {
 	http.HandleFunc("/create-profile", handleCreateProfile)
+	http.HandleFunc("/fetch-profile/", fetchProfileHandler)
 }
 
 func StartServer(PORT int) error {
@@ -36,11 +39,28 @@ func handleCreateProfile(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	if err:= database.CreateProfile(string(profileDataJson)); err != nil {
+	if err := database.CreateProfile(string(profileDataJson)); err != nil {
 		log.Printf("unable to create profile: %v", err)
 	}
 
 	// Respond with a success message
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("Profile created successfully"))
+}
+
+func fetchProfileHandler(w http.ResponseWriter, r *http.Request) {
+	path := strings.TrimPrefix(r.URL.Path, "/fetch-profile/")
+	id := strings.Split(path, "/")[0]
+	profile, err := database.FetchProfileFromDB(id)
+	if err != nil {
+		log.Printf("error fetching profile %v", err)
+	}
+
+	//to json
+	data, err := json.Marshal(profile)
+	if err != nil {
+		log.Printf("error encoding profile data to json %v", err)
+	}
+
+	w.Write([]byte(data))
 }
