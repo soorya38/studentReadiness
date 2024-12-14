@@ -1,6 +1,0 @@
-user (student)
-	-add certificates
-	-update profile
-	-view progress
-	-generate resume
-	-analytics
