@@ -2,7 +2,11 @@ package handler
 
 import (
 	"backend/presenter"
+	"backend/repo/db"
+	"backend/repository"
+	"backend/usecase/profile"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 )
@@ -14,6 +18,21 @@ func handleCreateProfile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	mockProfile := getMockProfile()
+
+	db, err := db.ConnectToDB()
+	if err != nil {
+		http.Error(w, "failed to connect to database", http.StatusInternalServerError)
+		return
+	}
+
+	repo := repository.NewProfilePGSQL(db)
+	s := profile.NewService(repo)
+
+	if err := s.CreateProfile(); err != nil {
+		http.Error(w, "failed to create profile", http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(mockProfile)
 }
@@ -23,21 +42,13 @@ func handleProfile(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case http.MethodGet:
-		// w.Header().Set("Content-Type", "application/json")
-		// if err := json.NewEncoder(w).Encode(mockProfile); err != nil {
-		// 	http.Error(w, "could not encode profile", http.StatusInternalServerError)
-		// }
 		getProfile(w, r)
 
 	case http.MethodPut:
-		mockProfile.BasicInfo.Name = "Updated Name" // simulate an update
-		// w.Header().Set("Content-Type", "application/json")
-		// json.NewEncoder(w).Encode(mockProfile)
+		mockProfile.BasicInfo.Name = "Updated Name"
 		updateProfile(w, r)
 
 	case http.MethodDelete:
-		// w.WriteHeader(http.StatusNoContent)
-		// fmt.Fprintf(w, "Profile deleted successfully")
 		deleteProfile(w, r)
 
 	default:
@@ -46,14 +57,23 @@ func handleProfile(w http.ResponseWriter, r *http.Request) {
 }
 
 func getProfile(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Path[len("/profile/"):]
+	fmt.Println(id)
+
 	w.WriteHeader(http.StatusOK)
 }
 
 func updateProfile(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Path[len("/profile/"):]
+	fmt.Println(id)
+
 	w.WriteHeader(http.StatusOK)
 }
 
 func deleteProfile(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Path[len("/profile/"):]
+	fmt.Println(id)
+
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -127,5 +147,5 @@ func getMockProfile() presenter.Profile {
 
 func RegisterHandler() {
 	http.HandleFunc("/profile", handleCreateProfile)
-	http.HandleFunc("/profile/", handleProfile) // Placeholder path for dynamic ID
+	http.HandleFunc("/profile/", handleProfile)
 }

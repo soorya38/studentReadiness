@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/interface/handler"
+	"backend/repo/db"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,10 @@ import (
 
 func main() {
 	var PORT int = 8080
+
+	if _, err := db.ConnectToDB(); err != nil {
+		panic(err)
+	}
 
 	handler.RegisterHandler()
 
