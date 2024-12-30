@@ -18,7 +18,7 @@ func main() {
 	handler.RegisterHandler()
 
 	log.Printf("listening on port: %v\n", PORT)
-	if err := http.ListenAndServe(fmt.Sprintf("localhost:%v", PORT), nil); err != nil {
+	if err := http.ListenAndServe(fmt.Sprintf(":%v", PORT), nil); err != nil {
 		panic(err)
 	}
 }
